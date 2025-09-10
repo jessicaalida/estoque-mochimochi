@@ -1,21 +1,44 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <title>Estoque Mochimochi</title>
-  <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Controle de Estoque - Mochimochi</title>
+  <link rel="stylesheet" href="style.css"/>
 </head>
 <body>
-  <h1>Controle de Estoque - Mochimochi</h1>
+  <div class="container">
+    <h1>📦 Controle de Estoque — Mochimochi</h1>
 
-  <div>
-    <input type="text" id="produto" placeholder="Nome do produto">
-    <input type="number" id="quantidade" placeholder="Quantidade">
-    <button onclick="adicionarProduto()">Adicionar</button>
+    <div class="form">
+      <input id="nome" type="text" placeholder="Nome do produto"/>
+      <input id="quantidade" type="number" min="0" step="1" placeholder="Qtd"/>
+      <input id="preco" type="number" min="0" step="0.01" placeholder="Preço (R$)"/>
+      <button id="btnAdicionar">Adicionar</button>
+    </div>
+
+    <div class="toolbar">
+      <input id="busca" type="text" placeholder="Pesquisar produto..."/>
+      <div class="totais">
+        <span>Itens distintos: <strong id="contagemProdutos">0</strong></span>
+        <span>Quantidade total: <strong id="quantidadeTotal">0</strong></span>
+        <span>Valor total: <strong id="valorTotal">R$ 0,00</strong></span>
+      </div>
+    </div>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Produto</th>
+          <th>Qtd</th>
+          <th>Preço (R$)</th>
+          <th>Subtotal (R$)</th>
+          <th style="min-width:230px">Ações</th>
+        </tr>
+      </thead>
+      <tbody id="tabela"></tbody>
+    </table>
   </div>
-
-  <h2>Lista de Produtos</h2>
-  <ul id="listaEstoque"></ul>
 
   <script src="script.js"></script>
 </body>
