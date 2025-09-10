@@ -1,108 +1,141 @@
-* { box-sizing: border-box; }
-:root {
-  --bg: #f7f5ff;
-  --card: #ffffff;
-  --border: #eae7ff;
-  --text: #222;
-  --muted: #666;
-  --primary: #6a5acd;
-  --green: #4CAF50;
-  --orange: #ff9800;
-  --blue: #2196F3;
-  --red: #f44336;
+const ADMIN_PASSWORD = "mochi2024"; // senha para editar/deletar
+
+const tabelaEl = document.getElementById("tabela");
+const nomeEl = document.getElementById("nome");
+const qtdEl = document.getElementById("quantidade");
+const precoEl = document.getElementById("preco");
+const btnAdd = document.getElementById("btnAdicionar");
+const buscaEl = document.getElementById("busca");
+
+const contagemProdutosEl = document.getElementById("contagemProdutos");
+const quantidadeTotalEl  = document.getElementById("quantidadeTotal");
+const valorTotalEl       = document.getElementById("valorTotal");
+
+document.addEventListener("DOMContentLoaded", render);
+btnAdd.addEventListener("click", adicionarProduto);
+buscaEl.addEventListener("input", render);
+
+
+function ler()  { return JSON.parse(localStorage.getItem("produtos-mochimochi") || "[]"); }
+function gravar(produtos) { localStorage.setItem("produtos-mochimochi", JSON.stringify(produtos)); }
+
+function adicionarProduto() {
+  const nome = (nomeEl.value || "").trim();
+  const qtd  = parseInt(qtdEl.value, 10);
+  const preco = parseFloat(precoEl.value);
+
+  if (!nome || isNaN(qtd) || qtd < 0 || isNaN(preco) || preco < 0) {
+    alert("Preencha nome, quantidade (>=0) e preço (>=0).");
+    return;
+  }
+
+  const produtos = ler();
+  produtos.push({ id: Date.now(), nome, quantidade: qtd, preco });
+  gravar(produtos);
+  limparFormulario();
+  render();
 }
 
-body {
-  font-family: Arial, Helvetica, sans-serif;
-  background: var(--bg);
-  margin: 0;
-  padding: 20px;
+function editarProduto(id) {
+  const senha = prompt("Digite a senha de administrador para editar:");
+  if (senha !== ADMIN_PASSWORD) {
+    alert("Senha incorreta!");
+    return;
+  }
+
+  const produtos = ler();
+  const p = produtos.find(x => x.id === id);
+  if (!p) return;
+
+  const novoNome = prompt("Nome do produto:", p.nome);
+  if (novoNome === null) return;
+
+  let novaQtd = prompt("Quantidade (>=0):", String(p.quantidade));
+  if (novaQtd === null) return;
+
+  let novoPreco = prompt("Preço (R$):", String(p.preco));
+  if (novoPreco === null) return;
+
+  p.nome = novoNome.trim();
+  p.quantidade = parseInt(novaQtd, 10);
+  p.preco = parseFloat(novoPreco);
+
+  gravar(produtos);
+  render();
 }
 
-.container {
-  background: var(--card);
-  max-width: 1000px;
-  margin: auto;
-  padding: 22px;
-  border-radius: 16px;
-  box-shadow: 0 10px 28px rgba(0,0,0,.08);
-  border: 1px solid var(--border);
+function deletarProduto(id) {
+  const senha = prompt("Digite a senha de administrador para deletar:");
+  if (senha !== ADMIN_PASSWORD) {
+    alert("Senha incorreta!");
+    return;
+  }
+
+  if (!confirm("Tem certeza que deseja deletar este produto?")) return;
+  const produtos = ler().filter(p => p.id !== id);
+  gravar(produtos);
+  render();
 }
 
-.logo { text-align: center; margin-bottom: 8px; }
-.logo img { max-width: 180px; height: auto; }
-
-h1 { text-align: center; margin: 8px 0 18px; }
-
-.totais {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 16px;
-  font-size: 14px;
-  justify-content: center;
-  margin-bottom: 16px;
-}
-.totais strong { color: var(--text); }
-
-.form {
-  display: flex;
-  gap: 10px;
-  margin-bottom: 12px;
-}
-.form input {
-  flex: 1;
-  padding: 10px 12px;
-  border: 1px solid var(--border);
-  border-radius: 10px;
-}
-.form #quantidade { max-width: 120px; }
-.form #preco { max-width: 160px; }
-.form button {
-  padding: 10px 14px;
-  border: 0;
-  border-radius: 10px;
-  background: var(--primary);
-  color: #fff;
-  cursor: pointer;
-}
-.form button:hover { filter: brightness(.95); }
-
-.toolbar input {
-  padding: 10px 12px;
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  min-width: 240px;
-  margin-bottom: 12px;
-  display: block;
-  margin-left: auto;
-  margin-right: auto;
+function entrada(id) {
+  const produtos = ler();
+  const p = produtos.find(x => x.id === id);
+  if (!p) return;
+  p.quantidade++;
+  gravar(produtos);
+  render();
 }
 
-table { width: 100%; border-collapse: collapse; }
-th, td { padding: 12px; border-bottom: 1px solid var(--border); text-align: center; }
-td:first-child, th:first-child { text-align: left; }
+function saida(id) {
+  const produtos = ler();
+  const p = produtos.find(x => x.id === id);
+  if (!p) return;
+  if (p.quantidade <= 0) return alert("Estoque insuficiente.");
+  p.quantidade--;
+  gravar(produtos);
+  render();
+}
 
-.actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-  justify-content: center;
-}
-button.action {
-  padding: 6px 10px;
-  border: 0;
-  border-radius: 10px;
-  color: #fff;
-  cursor: pointer;
-  font-size: 12px;
-}
-.action.in  { background: var(--green); }
-.action.out { background: var(--orange); }
-.action.edt { background: var(--blue); }
-.action.del { background: var(--red); }
+function render() {
+  const filtro = (buscaEl.value || "").toLowerCase();
+  const produtos = ler().filter(p => p.nome.toLowerCase().includes(filtro));
 
-@media (max-width: 720px) {
-  .form { flex-direction: column; }
-  .toolbar { flex-direction: column; align-items: stretch; }
-  .totais { justify-content: space-between; }
+  tabelaEl.innerHTML = "";
+  let qtdTotal = 0;
+  let valorTotal = 0;
+
+  for (const p of produtos) {
+    const subtotal = p.quantidade * p.preco;
+    qtdTotal += p.quantidade;
+    valorTotal += subtotal;
+
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+      <td>${escapeHTML(p.nome)}</td>
+      <td>${p.quantidade}</td>
+      <td>${formatBRL(p.preco)}</td>
+      <td>${formatBRL(subtotal)}</td>
+      <td class="actions">
+        <button class="action in" onclick="entrada(${p.id})">Entrada +1</button>
+        <button class="action out" onclick="saida(${p.id})">Venda -1</button>
+        <button class="action edt" onclick="editarProduto(${p.id})">Editar</button>
+        <button class="action del" onclick="deletarProduto(${p.id})">Deletar</button>
+      </td>
+    `;
+    tabelaEl.appendChild(tr);
+  }
+
+  contagemProdutosEl.textContent = String(produtos.length);
+  quantidadeTotalEl.textContent  = String(qtdTotal);
+  valorTotalEl.textContent       = formatBRL(valorTotal);
 }
+
+function limparFormulario() { nomeEl.value = ""; qtdEl.value = ""; precoEl.value = ""; }
+
+function formatBRL(n) { return n.toLocaleString("pt-BR", { style:"currency", currency:"BRL" }); }
+function escapeHTML(s){ return s.replace(/[&<>'"]/g, c=>({ "&":"&amp;","<":"&lt;",">":"&gt;","'":"&#39;",'"':"&quot;"}[c])); }
+
+window.entrada = entrada;
+window.saida = saida;
+window.editarProduto = editarProduto;
+window.deletarProduto = deletarProduto;
