@@ -8,8 +8,21 @@
 </head>
 <body>
   <div class="container">
-    <h1>📦 Controle de Estoque — Mochimochi</h1>
+    <!-- Logo -->
+    <div class="logo">
+      <img src="logo.png" alt="Logo Mochimochi"/>
+    </div>
 
+    <h1>Controle de Estoque — Mochimochi</h1>
+
+    <!-- Totais -->
+    <div class="totais">
+      <span>Itens distintos: <strong id="contagemProdutos">0</strong></span>
+      <span>Quantidade total: <strong id="quantidadeTotal">0</strong></span>
+      <span>Valor total: <strong id="valorTotal">R$ 0,00</strong></span>
+    </div>
+
+    <!-- Formulário -->
     <div class="form">
       <input id="nome" type="text" placeholder="Nome do produto"/>
       <input id="quantidade" type="number" min="0" step="1" placeholder="Qtd"/>
@@ -17,15 +30,12 @@
       <button id="btnAdicionar">Adicionar</button>
     </div>
 
+    <!-- Busca -->
     <div class="toolbar">
       <input id="busca" type="text" placeholder="Pesquisar produto..."/>
-      <div class="totais">
-        <span>Itens distintos: <strong id="contagemProdutos">0</strong></span>
-        <span>Quantidade total: <strong id="quantidadeTotal">0</strong></span>
-        <span>Valor total: <strong id="valorTotal">R$ 0,00</strong></span>
-      </div>
     </div>
 
+    <!-- Tabela -->
     <table>
       <thead>
         <tr>
