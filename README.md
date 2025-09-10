@@ -1,12 +1,12 @@
-# Controle de Estoque - Mochimochi
+# 📦 Controle de Estoque - Mochimochi
 
 Este é um protótipo de **sistema de controle de estoque** desenvolvido como atividade prática da disciplina *Engenharia e Projeto de Software*.  
-O sistema permite gerenciar produtos da loja Mochimochi de forma simples, rodando direto no navegador.
+O sistema roda direto no navegador, permitindo gerenciar de forma simples os produtos da loja Mochimochi.
 
 ---
 
-## Funcionalidades
-- Adicionar produtos (nome, quantidade e preço).
+## 🚀 Funcionalidades
+- Adicionar produtos (nome, quantidade e preço unitário).
 - Listar todos os produtos em uma tabela.
 - Atualizar estoque com **entrada** e **saída (venda)**.
 - Editar informações de produtos já cadastrados.
@@ -17,7 +17,7 @@ O sistema permite gerenciar produtos da loja Mochimochi de forma simples, rodand
 
 ---
 
-## Tecnologias Utilizadas
+## 🛠️ Tecnologias Utilizadas
 - **HTML5**
 - **CSS3**
 - **JavaScript (ES6+)**
@@ -26,18 +26,18 @@ O sistema permite gerenciar produtos da loja Mochimochi de forma simples, rodand
 
 ---
 
-## Como usar
+## 📖 Como usar
 1. Abra o sistema no navegador pelo link do GitHub Pages:  
    👉 [Clique aqui para acessar](https://jessicaalida.github.io/estoque-mochimochi/)  
 
 2. Na tela principal, você pode:
    - Preencher nome, quantidade e preço → clicar em **Adicionar**.
    - Usar os botões de **Entrada**, **Venda**, **Editar** e **Deletar** para gerenciar os produtos.
-   - Acompanhar totais (itens, quantidade e valor em estoque) no topo.
+   - Acompanhar os totais (itens, quantidade e valor em estoque) no topo.
 
 ---
 
-## Testes
+## 🧪 Testes
 
 ### Testes Unitários (manuais)
 - ✅ Adicionar produto → aparece corretamente na tabela.  
@@ -57,12 +57,12 @@ O sistema permite gerenciar produtos da loja Mochimochi de forma simples, rodand
 
 ---
 
-## Próximos Passos (possíveis melhorias)
+## 📌 Possíveis Melhorias Futuras
 - Exportar estoque em planilha (CSV).  
-- Login de usuários (estoquista / administrador).  
+- Criar login de usuários (estoquista / administrador).  
 - Relatórios gráficos de vendas e estoque.  
 
 ---
 
-## Autoria
+## 👩‍💻 Autoria
 Desenvolvido por **Jéssica Valença** como parte do curso de *Engenharia e Projeto de Software*.  
