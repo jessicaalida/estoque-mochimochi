@@ -28,7 +28,7 @@ O sistema permite gerenciar produtos da loja Mochimochi de forma simples, rodand
 
 ## Como usar
 1. Abra o sistema no navegador pelo link do GitHub Pages:  
-   👉 [Clique aqui para acessar](https://seuusuario.github.io/estoque-mochimochi/)  
+   👉 [Clique aqui para acessar](https://jessicaalida.github.io/estoque-mochimochi/)  
 
 2. Na tela principal, você pode:
    - Preencher nome, quantidade e preço → clicar em **Adicionar**.
