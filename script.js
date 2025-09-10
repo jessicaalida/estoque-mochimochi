@@ -1,4 +1,3 @@
-const ADMIN_PASSWORD = "mochi2024"; // senha para editar/deletar
 
 const tabelaEl = document.getElementById("tabela");
 const nomeEl = document.getElementById("nome");
@@ -16,8 +15,10 @@ btnAdd.addEventListener("click", adicionarProduto);
 buscaEl.addEventListener("input", render);
 
 
-function ler()  { return JSON.parse(localStorage.getItem("produtos-mochimochi") || "[]"); }
-function gravar(produtos) { localStorage.setItem("produtos-mochimochi", JSON.stringify(produtos)); }
+const KEY = "produtos-mochimochi";
+const read = () => JSON.parse(localStorage.getItem(KEY) || "[]");
+const write = (v) => localStorage.setItem(KEY, JSON.stringify(v));
+
 
 function adicionarProduto() {
   const nome = (nomeEl.value || "").trim();
@@ -29,76 +30,79 @@ function adicionarProduto() {
     return;
   }
 
-  const produtos = ler();
-  produtos.push({ id: Date.now(), nome, quantidade: qtd, preco });
-  gravar(produtos);
+  const produtos = read();
+  const idx = produtos.findIndex(p => p.nome.toLowerCase() === nome.toLowerCase());
+  if (idx >= 0) {
+    produtos[idx].quantidade += qtd;
+    produtos[idx].preco = preco;
+  } else {
+    produtos.push({ id: Date.now(), nome, quantidade: qtd, preco });
+  }
+  write(produtos);
   limparFormulario();
   render();
 }
 
 function editarProduto(id) {
-  const senha = prompt("Digite a senha de administrador para editar:");
-  if (senha !== ADMIN_PASSWORD) {
-    alert("Senha incorreta!");
-    return;
-  }
-
-  const produtos = ler();
+  const produtos = read();
   const p = produtos.find(x => x.id === id);
   if (!p) return;
 
   const novoNome = prompt("Nome do produto:", p.nome);
   if (novoNome === null) return;
 
-  let novaQtd = prompt("Quantidade (>=0):", String(p.quantidade));
+  let novaQtd = prompt("Quantidade (inteiro >= 0):", String(p.quantidade));
   if (novaQtd === null) return;
 
   let novoPreco = prompt("Preço (R$):", String(p.preco));
   if (novoPreco === null) return;
 
-  p.nome = novoNome.trim();
-  p.quantidade = parseInt(novaQtd, 10);
-  p.preco = parseFloat(novoPreco);
+  novaQtd = parseInt(novaQtd, 10);
+  novoPreco = parseFloat(novoPreco);
 
-  gravar(produtos);
+  if (!novoNome.trim() || isNaN(novaQtd) || novaQtd < 0 || isNaN(novoPreco) || novoPreco < 0) {
+    alert("Valores inválidos.");
+    return;
+  }
+
+  p.nome = novoNome.trim();
+  p.quantidade = novaQtd;
+  p.preco = novoPreco;
+
+  write(produtos);
   render();
 }
 
 function deletarProduto(id) {
-  const senha = prompt("Digite a senha de administrador para deletar:");
-  if (senha !== ADMIN_PASSWORD) {
-    alert("Senha incorreta!");
-    return;
-  }
-
   if (!confirm("Tem certeza que deseja deletar este produto?")) return;
-  const produtos = ler().filter(p => p.id !== id);
-  gravar(produtos);
+  const produtos = read().filter(p => p.id !== id);
+  write(produtos);
   render();
 }
 
-function entrada(id) {
-  const produtos = ler();
+
+function entrada(id, qtd = 1) {
+  const produtos = read();
   const p = produtos.find(x => x.id === id);
   if (!p) return;
-  p.quantidade++;
-  gravar(produtos);
+  p.quantidade += qtd;
+  write(produtos);
+  render();
+}
+function saida(id, qtd = 1) {
+  const produtos = read();
+  const p = produtos.find(x => x.id === id);
+  if (!p) return;
+  if (p.quantidade - qtd < 0) return alert("Quantidade insuficiente em estoque.");
+  p.quantidade -= qtd;
+  write(produtos);
   render();
 }
 
-function saida(id) {
-  const produtos = ler();
-  const p = produtos.find(x => x.id === id);
-  if (!p) return;
-  if (p.quantidade <= 0) return alert("Estoque insuficiente.");
-  p.quantidade--;
-  gravar(produtos);
-  render();
-}
 
 function render() {
   const filtro = (buscaEl.value || "").toLowerCase();
-  const produtos = ler().filter(p => p.nome.toLowerCase().includes(filtro));
+  const produtos = read().filter(p => p.nome.toLowerCase().includes(filtro));
 
   tabelaEl.innerHTML = "";
   let qtdTotal = 0;
@@ -116,7 +120,7 @@ function render() {
       <td>${formatBRL(p.preco)}</td>
       <td>${formatBRL(subtotal)}</td>
       <td class="actions">
-        <button class="action in" onclick="entrada(${p.id})">Entrada +1</button>
+        <button class="action in"  onclick="entrada(${p.id})">Entrada +1</button>
         <button class="action out" onclick="saida(${p.id})">Venda -1</button>
         <button class="action edt" onclick="editarProduto(${p.id})">Editar</button>
         <button class="action del" onclick="deletarProduto(${p.id})">Deletar</button>
@@ -130,10 +134,12 @@ function render() {
   valorTotalEl.textContent       = formatBRL(valorTotal);
 }
 
-function limparFormulario() { nomeEl.value = ""; qtdEl.value = ""; precoEl.value = ""; }
+function limparFormulario(){ nomeEl.value = ""; qtdEl.value = ""; precoEl.value = ""; }
 
-function formatBRL(n) { return n.toLocaleString("pt-BR", { style:"currency", currency:"BRL" }); }
+
+function formatBRL(n){ return Number(n).toLocaleString("pt-BR", { style:"currency", currency:"BRL" }); }
 function escapeHTML(s){ return s.replace(/[&<>'"]/g, c=>({ "&":"&amp;","<":"&lt;",">":"&gt;","'":"&#39;",'"':"&quot;"}[c])); }
+
 
 window.entrada = entrada;
 window.saida = saida;
