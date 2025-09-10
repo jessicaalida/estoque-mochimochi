@@ -1,11 +1,11 @@
-# 📦 Controle de Estoque - Mochimochi
+# Controle de Estoque - Mochimochi
 
 Este é um protótipo de **sistema de controle de estoque** desenvolvido como atividade prática da disciplina *Engenharia e Projeto de Software*.  
 O sistema roda direto no navegador, permitindo gerenciar de forma simples os produtos da loja Mochimochi.
 
 ---
 
-## 🚀 Funcionalidades
+## Funcionalidades
 - Adicionar produtos (nome, quantidade e preço unitário).
 - Listar todos os produtos em uma tabela.
 - Atualizar estoque com **entrada** e **saída (venda)**.
@@ -17,7 +17,7 @@ O sistema roda direto no navegador, permitindo gerenciar de forma simples os pro
 
 ---
 
-## 🛠️ Tecnologias Utilizadas
+## Tecnologias Utilizadas
 - **HTML5**
 - **CSS3**
 - **JavaScript (ES6+)**
@@ -26,7 +26,7 @@ O sistema roda direto no navegador, permitindo gerenciar de forma simples os pro
 
 ---
 
-## 📖 Como usar
+## Como usar
 1. Abra o sistema no navegador pelo link do GitHub Pages:  
    👉 [Clique aqui para acessar](https://jessicaalida.github.io/estoque-mochimochi/)  
 
@@ -37,7 +37,7 @@ O sistema roda direto no navegador, permitindo gerenciar de forma simples os pro
 
 ---
 
-## 🧪 Testes
+## Testes
 
 ### Testes Unitários (manuais)
 - ✅ Adicionar produto → aparece corretamente na tabela.  
@@ -57,7 +57,7 @@ O sistema roda direto no navegador, permitindo gerenciar de forma simples os pro
 
 ---
 
-## 📌 Possíveis Melhorias Futuras
+## Possíveis Melhorias Futuras
 - Exportar estoque em planilha (CSV).  
 - Criar login de usuários (estoquista / administrador).  
 - Relatórios gráficos de vendas e estoque.  
